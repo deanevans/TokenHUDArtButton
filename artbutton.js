@@ -234,10 +234,12 @@ class ShowArt {
 	 */
 	static getTokenImages(token, actor) {
 		const mystery = "icons/svg/mystery-man.svg";
-		const synthActor = token.actorData;
+		//const synthActor = token.actorData;
 
-		let actorImg = synthActor.img || actor.img;
-		let tokenImg = token.texture.src;
+		//let actorImg = synthActor.img || actor.img;
+		//let tokenImg = token.texture.src;
+		let actorImg = actor?.img || mystery;
+		let tokenImg = token.texture?.src || mystery;
 
 		const am = actorImg === mystery;
 		const tm = tokenImg === mystery;
@@ -326,6 +328,11 @@ class ShowArt {
  * @extends {ImagePopout}
  */
 class MultiMediaPopout extends ImagePopout {
+	static get defaultOptions() {
+		return foundry.utils.mergeObject(super.defaultOptions, {
+			template: "modules/token-hud-art-button/media-popout.html"
+		});
+	}
 	/**
 	 * Creates an instance of MultiMediaPopout.
 	 *
@@ -340,7 +347,6 @@ class MultiMediaPopout extends ImagePopout {
 			src.slice(-4).toLowerCase()
 		);
 
-		this.options.template = "modules/token-hud-art-button/media-popout.html";
 	}
 
 	/** @override */
