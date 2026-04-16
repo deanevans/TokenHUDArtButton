@@ -175,9 +175,11 @@ class ShowArt {
 	 * @memberof ShowArt
 	 */
 	static createImagePopup(image, title) {
-		return new MultiMediaPopout(image, {
+		const pop = new MultiMediaPopout(image, {
 			title, shareable: true,
-		}).render(true);
+		});
+		pop.render(true);
+		return pop;
 	}
 	/**
 	 * Retrieves the Actor associated with a given token.
@@ -342,11 +344,8 @@ class MultiMediaPopout extends ImagePopout {
 	 */
 	constructor(src, options = {}) {
 		super(src, options);
-
-		this.video = [".mp4", "webm"].includes(
-			src.slice(-4).toLowerCase()
-		);
-
+		this._mediaSrc = src;
+		this.video = src ? [".mp4", "webm"].includes(src.slice(-4).toLowerCase()) : false;
 	}
 
 	/** @override */
@@ -360,7 +359,7 @@ class MultiMediaPopout extends ImagePopout {
 	*/
 	shareImage() {
 		game.socket.emit("module.token-hud-art-button", {
-			image: this.object,
+			image: this._mediaSrc ?? this.object,
 			title: this.options.title,
 			uuid: this.options.uuid
 		});
